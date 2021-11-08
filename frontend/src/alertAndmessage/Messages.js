@@ -1,8 +1,8 @@
 import React from "react";
 import { Alert } from "react-bootstrap";
 
-function Message({ variant, children }) {
+function Messages({ variant, children }) {
   return <Alert variant={variant}>{children}</Alert>;
 }
 
-export default Message;
+export default Messages;

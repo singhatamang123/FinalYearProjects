@@ -6,7 +6,7 @@ import Rating from "../components/Rating";
 import { useDispatch, useSelector } from "react-redux";
 import { listProductDetails } from "../actions/productActions";
 import Loader from "../alertAndmessage/Loader";
-import Message from "../alertAndmessage/Message";
+import Messages from "../alertAndmessage/Messages";
 
 function ProductScreen({ match }) {
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ function ProductScreen({ match }) {
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Messages variant="danger">{error}</Messages>
       ) : (
         <Row>
           <Col md={6}>

@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 // import products from "../products";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col} from "react-bootstrap";
 import Product from "../components/Product";
 import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "../actions/productActions";
-import Loader from "../alertAndmessage/Loader"
-import Message from "../alertAndmessage/Message"
-
+import Loader from "../alertAndmessage/Loader";
+import Messages from "../alertAndmessage/Messages";
+import logo from "./logo.png";
 
 function HomeScreen() {
   const dispatch = useDispatch();
@@ -20,9 +20,9 @@ function HomeScreen() {
     <div>
       <h1>Latest Products</h1>
       {loading ? (
-        <Loader/>
+        <Loader />
       ) : error ? (
-        <Message variant='danger'>{error}</Message>
+        <Messages variant="danger">{error}</Messages>
       ) : (
         <Row>
           {/* most commonly used for rendering a list of data to the DOM.*/}
@@ -33,6 +33,7 @@ function HomeScreen() {
               <Product product={product} />
             </Col>
           ))}
+          <img src={logo} alt="logo" height="500" width="200" />
         </Row>
       )}
     </div>
