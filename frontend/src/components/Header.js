@@ -2,31 +2,32 @@ import React from "react";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from '../actions/userAction'
+import { logout } from "../actions/userAction";
 
 function Header() {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const dispatch = useDispatch();
   const logoutHandler = () => {
-    dispatch(logout)
-  }
+    dispatch(logout);
+  };
   return (
     <header>
-      <Navbar bg="primary" variant="dark" expand="lg">
+      <Navbar bg="primary" variant="dark" expand="lg" collapseOnSelect>
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand href="#home">Nepshop</Navbar.Brand>
+            <Navbar.Brand> NepShop
+            </Navbar.Brand>
           </LinkContainer>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-              <LinkContainer to="/cart">
+            <Nav className="ms-auto">
+              {/* <LinkContainer to="/cart">
                 <Nav.Link>
                   <i className="fas fa-shopping-cart"></i>Cart
                 </Nav.Link>
-              </LinkContainer>
+              </LinkContainer> */}
 
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id="username">

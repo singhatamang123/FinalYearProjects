@@ -4,7 +4,7 @@ import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
-
+import UserScreen from "./screens/UserScreen";
 
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
@@ -19,11 +19,11 @@ function App() {
           <Route path="/" component={HomeScreen} exact />
           <Route path="/login" component={LoginScreen} />
           <Route path="/register" component={RegisterScreen} />
-
+          <Route path="/profile" component={UserScreen} />
           <Route path="/product/:id" component={ProductScreen}/>
         </Container>
       </main>
-      <Footer />
+      <Footer/>
     </Router>
   );
 }

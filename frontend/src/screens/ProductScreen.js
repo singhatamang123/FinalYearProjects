@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Row, Col, Image, ListGroup, Button, Card } from "react-bootstrap";
+import { Row, Col, Image, ListGroup, Card } from "react-bootstrap";
 // import products from "../products";
 import Rating from "../components/Rating";
 import { useDispatch, useSelector } from "react-redux";
 import { listProductDetails } from "../actions/productActions";
 import Loader from "../alertAndmessage/Loader";
 import Messages from "../alertAndmessage/Messages";
+import { IoArrowBackCircleSharp } from "react-icons/io5";
 
 function ProductScreen({ match }) {
   const dispatch = useDispatch();
@@ -18,8 +19,11 @@ function ProductScreen({ match }) {
 
   return (
     <div>
-      <Link to="/" className="btn btn-light my-3">
-        Go Back{" "}
+      <Link to="/">
+        <h1>
+          <IoArrowBackCircleSharp />
+        </h1>
+        {""}
       </Link>
       {loading ? (
         <Loader />
@@ -28,7 +32,15 @@ function ProductScreen({ match }) {
       ) : (
         <Row>
           <Col md={6}>
-            <Image src={product.image} alt={product.name} fluid />
+            <Image
+              src={product.image}
+              alt={product.name}
+              style={{
+                height: 500,
+                // width: 500,
+              }}
+              fluid
+            />
           </Col>
           <Col md={3}>
             <ListGroup.Item variant="flush">
@@ -69,7 +81,7 @@ function ProductScreen({ match }) {
                     </Col>
                   </Row>
                 </ListGroup.Item>
-                <ListGroup.Item>
+                {/* <ListGroup.Item>
                   <Button
                     className="btn btn-dark w-100"
                     variant="danger"
@@ -78,7 +90,7 @@ function ProductScreen({ match }) {
                   >
                     ADD TO CART
                   </Button>
-                </ListGroup.Item>
+                </ListGroup.Item> */}
               </ListGroup>
             </Card>
           </Col>

@@ -28,7 +28,6 @@ function HomeScreen() {
           {/* most commonly used for rendering a list of data to the DOM.*/}
           {products.map((product) => (
             <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-              {" "}
               {/* xs = extra small screens (mobile phones) sm = small screens (tablets) md = medium screens (some desktops) lg = large screens (remaining desktops)*/}
               <Product product={product} />
             </Col>
