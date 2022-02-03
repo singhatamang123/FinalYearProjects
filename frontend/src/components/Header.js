@@ -1,7 +1,8 @@
 import React from "react";
-import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import SearchBox from "./SearchBox"
 import { logout } from "../actions/userAction";
 
 function Header() {
@@ -13,7 +14,7 @@ function Header() {
   };
   return (
     <header>
-      <Navbar bg="primary" variant="dark" expand="lg" collapseOnSelect>
+      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
         <Container>
           <LinkContainer to="/">
             <Navbar.Brand> NepShop
@@ -22,12 +23,17 @@ function Header() {
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
+            <SearchBox />
+
+
             <Nav className="ms-auto">
-              {/* <LinkContainer to="/cart">
+
+              <LinkContainer to="/cart">
                 <Nav.Link>
                   <i className="fas fa-shopping-cart"></i>Cart
                 </Nav.Link>
-              </LinkContainer> */}
+              </LinkContainer>
+
 
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id="username">
@@ -45,6 +51,21 @@ function Header() {
                   </Nav.Link>
                 </LinkContainer>
               )}
+
+              {userInfo && userInfo.isAdmin && (
+                <NavDropdown title='Admin' id="adminmenu">
+                  <LinkContainer to="/admin/userlist">
+                    <NavDropdown.Item>Users</NavDropdown.Item>
+
+                  </LinkContainer>
+
+                  <LinkContainer to="/admin/productlist">
+                    <NavDropdown.Item>Product</NavDropdown.Item>
+
+                  </LinkContainer>
+                </NavDropdown>
+              )}
+
             </Nav>
           </Navbar.Collapse>
         </Container>
