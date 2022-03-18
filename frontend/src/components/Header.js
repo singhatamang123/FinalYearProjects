@@ -1,9 +1,11 @@
 import React from "react";
-import { Navbar, Nav, Container, NavDropdown, Button } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import SearchBox from "./SearchBox"
 import { logout } from "../actions/userAction";
+// import ecommerce from "./ecommerce.png";
+import shopping from "./shopping-bag.png";
 
 function Header() {
   const userLogin = useSelector((state) => state.userLogin);
@@ -17,7 +19,10 @@ function Header() {
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand> NepShop
+            <Navbar.Brand> <img src={shopping} alt="NepShop" style={{
+              width: '100%',
+              height: '70px',
+            }} />
             </Navbar.Brand>
           </LinkContainer>
 
@@ -28,12 +33,27 @@ function Header() {
 
             <Nav className="ms-auto">
 
-              <LinkContainer to="/cart">
+              {/* <LinkContainer to="/cart">
                 <Nav.Link>
                   <i className="fas fa-shopping-cart"></i>Cart
                 </Nav.Link>
-              </LinkContainer>
+              </LinkContainer> */}
 
+
+
+              {userInfo && userInfo.isAdmin && (
+                <NavDropdown title='Admin' id="adminmenu">
+                  <LinkContainer to="/admin/userlist">
+                    <NavDropdown.Item>Users</NavDropdown.Item>
+
+                  </LinkContainer>
+
+                  <LinkContainer to="/admin/productlist">
+                    <NavDropdown.Item>Product</NavDropdown.Item>
+
+                  </LinkContainer>
+                </NavDropdown>
+              )}
 
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id="username">
@@ -52,25 +72,11 @@ function Header() {
                 </LinkContainer>
               )}
 
-              {userInfo && userInfo.isAdmin && (
-                <NavDropdown title='Admin' id="adminmenu">
-                  <LinkContainer to="/admin/userlist">
-                    <NavDropdown.Item>Users</NavDropdown.Item>
-
-                  </LinkContainer>
-
-                  <LinkContainer to="/admin/productlist">
-                    <NavDropdown.Item>Product</NavDropdown.Item>
-
-                  </LinkContainer>
-                </NavDropdown>
-              )}
-
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-    </header>
+    </header >
   );
 }
 

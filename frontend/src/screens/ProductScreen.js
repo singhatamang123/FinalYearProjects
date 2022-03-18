@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Row, Col, Image, ListGroup, Card, Form, Button } from "react-bootstrap";
+import { Row, Col, Image, ListGroup, Form, Button } from "react-bootstrap";
 // import products from "../products";
 import Rating from "../components/Rating";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import Loader from "../alertAndmessage/Loader";
 import Messages from "../alertAndmessage/Messages";
 import { IoArrowBackCircleSharp } from "react-icons/io5";
 import { PRODUCT_CREATE_REVIEW_RESET } from "../constant/productConstants";
+import ContentRecommendation from "./ContentRecommendation";
 
 
 
@@ -56,7 +57,7 @@ function ProductScreen({ match, history }) {
   return (
 
     <div>
-      <Link to="/">
+      <Link to="/category">
         <h1>
           <IoArrowBackCircleSharp />
         </h1>
@@ -69,64 +70,50 @@ function ProductScreen({ match, history }) {
       ) : (
         <div>
           <Row>
-            <Col md={6}>
+            <Col md={4}>
               <Image
                 src={product.image}
                 alt={product.name}
                 style={{
                   height: 500,
-                  // width: 500,
+                  width: 500,
                 }}
                 fluid
               />
             </Col>
-            <Col md={3}>
-              <ListGroup.Item variant="flush">
-                <h3>{product.name}</h3>
-              </ListGroup.Item>
+            <Col md={6}>
+              <ListGroup variant="flush">
+                <ListGroup.Item >
+                  <h2>{product.name}</h2>
+                </ListGroup.Item>
 
-              <ListGroup.Item>
-                <Rating
-                  value={product.rating}
-                  text={`${product.numReviews} reviews`}
-                  color={"#ffa534"}
+                <ListGroup.Item>
+                  <Rating
+                    value={product.rating}
+                    text={`${product.numReviews} reviews`}
+                    color={"#ffa534"}
 
-                />
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <h4>Price: ${product.price}</h4>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <h6>Description:</h6> {product.description}
-              </ListGroup.Item>
-            </Col>
-
-            <Col md={3}>
-              <Card>
-                <ListGroup variant="flush">
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Price:</Col>
-                      <Col>
-                        <strong>${product.price}</strong>
-                      </Col>
-                    </Row>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Status:</Col>
-                      <Col>
-                        {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
-                      </Col>
-                    </Row>
-                  </ListGroup.Item>
-                </ListGroup>
-              </Card>
+                  />
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <h4 style={{ color: "red" }}>Price: ${product.price}</h4>
+                </ListGroup.Item>
+                <ListGroup.Item >
+                  <h4>Status: {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
+                  </h4>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <h4>Description:</h4> {product.description}
+                </ListGroup.Item>
+              </ListGroup>
             </Col>
           </Row>
+          <br />
+          <ContentRecommendation />
+          <br />
           <Row>
             <Col md={6}>
-              <h4>Reviews</h4>
+              <h4 style={{ color: 'black' }}>Users Reviews</h4>
               {product.reviews.length === 0 && <Messages variant='info'>No reviews</Messages>}
               <ListGroup variant='flush'>
                 {product.reviews.map((review) =>
@@ -174,6 +161,8 @@ function ProductScreen({ match, history }) {
                         ></Form.Control>
                       </Form.Group>
 
+                      <br />
+
                       <Button
                         disabled={loadingProductReview}
                         type='submit'
@@ -192,6 +181,7 @@ function ProductScreen({ match, history }) {
           </Row>
         </div>
       )}
+
     </div>
   )
 }

@@ -1,12 +1,16 @@
 .menu-item {
   min-width: 30%;
-  height: 240px;
+  height: 500px;
   flex: 1 1 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid black;
+  border: 1px solid #ccc;
   margin: 0 7.5px 15px;
+  // border-radius: 15px;
+  border: none;
+  background-color: #f0f8ff;
+
   overflow: hidden;
 
   &:hover {
@@ -42,14 +46,17 @@
   }
 
   .content {
-    height: 90px;
+    height: 50px;
     padding: 0 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     border: 1px solid black;
+    margin-top: 300px;
+    // border-radius: 5px;
     background-color: white;
+
     opacity: 0.7;
     position: absolute;
 
@@ -58,11 +65,6 @@
       margin: 0 6px 0;
       font-size: 22px;
       color: #4a4a4a;
-    }
-
-    .subtitle {
-      font-weight: lighter;
-      font-size: 16px;
     }
   }
 }

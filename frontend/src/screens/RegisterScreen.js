@@ -32,6 +32,9 @@ const validationSchema = Yup.object().shape({
 });
 
 function RegisterScreen({ location, history }) {
+
+
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,6 +46,10 @@ function RegisterScreen({ location, history }) {
 
   const userRegister = useSelector((state) => state.userRegister);
   const { error, loading, userInfo } = userRegister;
+
+
+
+
 
   useEffect(() => {
     if (userInfo) {
@@ -61,7 +68,7 @@ function RegisterScreen({ location, history }) {
   const submitHandler = (e) => {
     dispatch(registers(name, email, password));
 
-   
+
   };
 
   return (
@@ -113,6 +120,7 @@ function RegisterScreen({ location, history }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+
             <div className="invalid-feedback">{errors.password?.message}</div>
           </div>
           <br></br>
@@ -124,13 +132,13 @@ function RegisterScreen({ location, history }) {
               name="confirmPassword"
               type="password"
               {...register("confirmPassword")}
-              className={`form-control ${
-                errors.confirmPassword ? "is-invalid" : ""
-              }`}
+              className={`form-control ${errors.confirmPassword ? "is-invalid" : ""
+                }`}
               placeholder="Confirm your password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
+
             <div className="invalid-feedback">
               {errors.confirmPassword?.message}
             </div>

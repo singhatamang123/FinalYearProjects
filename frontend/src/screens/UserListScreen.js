@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Table, Button } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap';
 import { useDispatch, useSelector } from "react-redux";
-import { listUsers } from "../actions/userAction";
+import { listUsers, deleteUser } from "../actions/userAction";
 import Loader from "../alertAndmessage/Loader";
 import Messages from "../alertAndmessage/Messages";
+
+
+
 function UserListScreen({ history }) {
 
     const dispatch = useDispatch();
@@ -15,6 +18,9 @@ function UserListScreen({ history }) {
     const userLogin = useSelector((state) => state.userLogin);
     const { userInfo } = userLogin;
 
+    const userDelete = useSelector((state) => state.userDelete);
+    const { success: successDelete } = userDelete;
+
     useEffect(() => {
         if (userInfo && userInfo.isAdmin) {
             dispatch(listUsers());
@@ -22,10 +28,14 @@ function UserListScreen({ history }) {
         } else {
             history.push('/login')
         }
-    }, [dispatch, history])
+    }, [dispatch, history, successDelete, userInfo]);
 
     const deleteHandler = (id) => {
-        console.log('delete', id)
+
+        if (window.confirm('Are you sure you want to delete this user?')) {
+            dispatch(deleteUser(id));
+
+        }
 
     }
     return (
@@ -37,7 +47,7 @@ function UserListScreen({ history }) {
                 : error
                     ? (<Messages variant="danger">{error}</Messages>)
                     : (
-                        <Table striped bordered hover responsive className='table-sm'>
+                        <Table striped bordered hover variant="dark" className="table-sm" responsive="sm">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -75,12 +85,12 @@ function UserListScreen({ history }) {
                                 ))}
                             </tbody>
                         </Table>
-
                     )
             }
 
         </div >
     );
+
 }
 
 export default UserListScreen;

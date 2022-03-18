@@ -4,6 +4,14 @@ import {
   PRODUCT_LIST_SUCCESS,
   PRODUCT_LIST_FAIL,
 
+  PRODUCT_RECOMMEND_LIST_REQUEST,
+  PRODUCT_RECOMMEND_LIST_SUCCESS,
+  PRODUCT_RECOMMEND_LIST_FAIL,
+
+  PRODUCT_RECOMMEND_CONTENT_LIST_REQUEST,
+  PRODUCT_RECOMMEND_CONTENT_LIST_SUCCESS,
+  PRODUCT_RECOMMEND_CONTENT_LIST_FAIL,
+
 
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
@@ -16,6 +24,26 @@ import {
   PRODUCT_TOP_REQUEST,
   PRODUCT_TOP_SUCCESS,
   PRODUCT_TOP_FAIL,
+
+
+
+  PRODUCT_DELETE_REQUEST,
+  PRODUCT_DELETE_SUCCESS,
+  PRODUCT_DELETE_FAIL,
+
+
+  PRODUCT_CREATE_REQUEST,
+  PRODUCT_CREATE_SUCCESS,
+  PRODUCT_CREATE_FAIL,
+
+
+  PRODUCT_UPDATE_REQUEST,
+  PRODUCT_UPDATE_SUCCESS,
+  PRODUCT_UPDATE_FAIL,
+
+  PRODUCT_CATEGORY_REQUEST,
+  PRODUCT_CATEGORY_FAIL,
+  PRODUCT_CATEGORY_SUCCESS,
 
 
 } from "../constant/productConstants";
@@ -41,6 +69,84 @@ export const listProducts = (keyword = '') => async (dispatch) => {
   }
 };
 
+export const recommendProduct = (_id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: PRODUCT_RECOMMEND_LIST_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+
+      headers: {
+        "Content-type": "application/json",
+        authorization: `Bearer ${userInfo.token}`,
+      }
+
+    }
+
+    const { data } = await axios.get(
+      '/api/products/recommended/', config
+    );
+
+    dispatch({
+      type: PRODUCT_RECOMMEND_LIST_SUCCESS,
+      payload: data
+
+    })
+  }
+  catch (error) {
+    dispatch({
+      type: PRODUCT_RECOMMEND_LIST_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+    //  return response to user if statement if error message error message.data and used tenary method and none generic message
+  }
+};
+
+
+export const recommendContentProduct = (_id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: PRODUCT_RECOMMEND_CONTENT_LIST_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+
+      headers: {
+        "Content-type": "application/json",
+        authorization: `Bearer ${userInfo.token}`,
+      }
+
+    }
+
+    const { data } = await axios.get(
+      '/api/products/content/', config
+    );
+
+    dispatch({
+      type: PRODUCT_RECOMMEND_CONTENT_LIST_SUCCESS,
+      payload: data
+
+    })
+  }
+  catch (error) {
+    dispatch({
+      type: PRODUCT_RECOMMEND_CONTENT_LIST_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+    //  return response to user if statement if error message error message.data and used tenary method and none generic message
+  }
+};
 
 export const listProductDetails = (id) => async (dispatch) => {
   try {
@@ -62,6 +168,9 @@ export const listProductDetails = (id) => async (dispatch) => {
     //  return response to user if statement if error message error message.data and used tenary method and none generic message
   }
 };
+
+
+
 
 
 
@@ -120,6 +229,155 @@ export const listTopProducts = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: PRODUCT_TOP_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+    //  return response to user if statement if error message error message.data and used tenary method and none generic message
+  }
+};
+
+
+
+export const deleteProduct = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: PRODUCT_DELETE_REQUEST
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+
+    const { data } = await axios.delete(
+      `/api/products/delete/${id}/`,
+      config
+    )
+
+    dispatch({
+      type: PRODUCT_DELETE_SUCCESS,
+      payload: data
+    })
+
+
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_DELETE_FAIL,
+      payload: error.response && error.response.data.detail
+        ? error.response.data.detail
+        : error.message,
+    })
+  }
+}
+
+
+
+export const createProduct = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: PRODUCT_CREATE_REQUEST
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+
+    const { data } = await axios.post(
+      `/api/products/create/`,
+      {},
+      config
+    )
+    dispatch({
+      type: PRODUCT_CREATE_SUCCESS,
+      payload: data,
+    })
+
+
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_CREATE_FAIL,
+      payload: error.response && error.response.data.detail
+        ? error.response.data.detail
+        : error.message,
+    })
+  }
+}
+
+
+
+
+export const updateProduct = (product) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: PRODUCT_UPDATE_REQUEST
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    }
+
+    const { data } = await axios.put(
+      `/api/products/update/${product._id}/`,
+      product,
+      config
+    )
+    dispatch({
+      type: PRODUCT_UPDATE_SUCCESS,
+      payload: data,
+    })
+
+    dispatch({
+      type: PRODUCT_DETAILS_SUCCESS,
+      payload: data,
+    })
+
+
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_UPDATE_FAIL,
+      payload: error.response && error.response.data.detail
+        ? error.response.data.detail
+        : error.message,
+    })
+  }
+}
+
+
+
+export const listCategory = () => async (dispatch) => {
+  try {
+    dispatch({ type: PRODUCT_CATEGORY_REQUEST });
+    const { data } = await axios.get('/api/products/category/');
+
+    dispatch({
+      type: PRODUCT_CATEGORY_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_CATEGORY_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail

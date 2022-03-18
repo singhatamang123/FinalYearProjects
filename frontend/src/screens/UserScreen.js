@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 // import { Link } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../alertAndmessage/Loader";
 import Messages from "../alertAndmessage/Messages";
-import { getUserDetails } from "../actions/userAction";
+import { getUserDetails, updateUserProfile } from "../actions/userAction";
+import { IoArrowBackCircleSharp } from "react-icons/io5";
+import FormContain from "../components/FormContain";
+import { Link } from "react-router-dom";
+import { USER_UPDATE_PROFILE_RESET } from "../constant/usersConstant";
 
 function UserScreen({ history }) {
   const [name, setName] = useState("");
@@ -21,31 +25,46 @@ function UserScreen({ history }) {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+
+  const userUpdateProfile = useSelector(state => state.userUpdateProfile)
+  const { success } = userUpdateProfile
+
   useEffect(() => {
     if (!userInfo) {
       history.push("/login");
     } else {
-      if (!user || !user.name) {
+      if (!user || !user.name || success || userInfo._id !== user._id) {
+        dispatch({ type: USER_UPDATE_PROFILE_RESET })
         dispatch(getUserDetails("profile"));
+
       } else {
         setName(user.name);
         setEmail(user.email);
       }
     }
-  }, [history, dispatch, userInfo, user]);
+  }, [history, dispatch, userInfo, user, success]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-
     if (password !== confirmPassword) {
       setMessage("Passwords do not match");
     } else {
-      console.log("Updating ..");
+      dispatch(updateUserProfile({
+        'id': user._id,
+        'name': name,
+        'email': email,
+        'password': password,
+      }))
     }
   };
   return (
-    <Row>
-      <Col md={3}>
+    <div>
+      <Link to=''>
+        <h1>
+          <IoArrowBackCircleSharp />
+        </h1>
+      </Link>
+      <FormContain>
         <h2>User Info</h2>
         {message && <Messages variant="danger">{message}</Messages>}
         {error && <Messages variant="danger">{error}</Messages>}
@@ -97,11 +116,9 @@ function UserScreen({ history }) {
             Update
           </Button>
         </Form>
-      </Col>
-      <Col md={9}>
-        <h2>Order Details</h2>
-      </Col>
-    </Row>
+      </FormContain>
+
+    </div>
   );
 }
 

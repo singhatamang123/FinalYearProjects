@@ -6,7 +6,9 @@ import { Link } from "react-router-dom";
 
 function Product({ product }) {
   return (
-    <Card className="my-3 p-3 rounded" style={{ border: 0, outline: 'none' }}>
+    <Card className="my-1 p-0 rounded " style={{
+      border: 0, outline: 'none'
+    }}>
       <Link to={`/product/${product._id}`}>
         <Card.Img src={product.image} width="100%" height="250px" />
       </Link>
@@ -29,7 +31,7 @@ function Product({ product }) {
         </Card.Text>
         <Card.Text as="h3">${product.price}</Card.Text>
       </Card.Body>
-    </Card>
+    </Card >
   );
 }
 
