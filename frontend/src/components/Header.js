@@ -21,7 +21,7 @@ function Header() {
           <LinkContainer to="/">
             <Navbar.Brand> <img src={shopping} alt="NepShop" style={{
               width: '100%',
-              height: '70px',
+              height: '50px',
             }} />
             </Navbar.Brand>
           </LinkContainer>

@@ -31,11 +31,10 @@ function MenuItem({ category }) {
             />
 
             <button className='content' onSubmit={handler}>
-                <Link to='category' style={{ textDecoration: 'none' }} >
-                    <h1 className='title'>{category.category}</h1>
+                <Link to={`/category/?keyword=${category.name}`} style={{ textDecoration: 'none' }}>
+                    <h1 className='title'>{category.name}</h1>
                 </Link>
                 {/* <span className='subtitle'>SHOP NOW</span> */}
-
             </button>
 
 

@@ -1,6 +1,5 @@
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Recommend from "./components/Recommend";
 import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
 import LoginScreen from "./screens/LoginScreen";
@@ -35,13 +34,13 @@ function App() {
           <Route path="/admin/user/:id/edit" component={UserEditScreen} />
           <Route path="/product/:id" component={ProductScreen} />
           {/* <Route path="/recommend" component={Recommendation} /> */}
+
           <Route path="/content" component={ContentRecommendation} />
           <Route path="/admin/productList" component={ProductListScreen} />
           <Route path='/admin/product/:id/edit' component={ProductEditScreen} />
         </Container>
 
       </main>
-      <Recommend />
 
       <Footer />
     </Router >

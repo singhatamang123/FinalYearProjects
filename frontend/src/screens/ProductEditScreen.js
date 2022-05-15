@@ -68,7 +68,7 @@ function ProductEditScreen({ match, history }) {
             price,
             image,
             brand,
-            category,
+            category_id: category,
             countinstock,
             description
         }))
@@ -179,9 +179,17 @@ function ProductEditScreen({ match, history }) {
                                 <Form.Control
                                     type='text'
                                     placeholder='Enter category'
+                                    as='select'
                                     value={category}
                                     onChange={(e) => setCategory(e.target.value)}
+
                                 >
+                                    <option value=''>Select...</option>
+                                    <option value='1'>Bag</option>
+                                    <option value='2'>Shoes</option>
+                                    <option value='3'>T-shirts</option>
+                                    <option value='4'>Cap</option>
+                                    <option value='5'>Watch</option>
                                 </Form.Control>
                             </Form.Group>
 

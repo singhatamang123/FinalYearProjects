@@ -11,6 +11,8 @@ import Paginate from "../components/Paginate";
 
 
 
+
+
 function ProductListScreen({ history }) {
 
     const dispatch = useDispatch();
@@ -86,7 +88,7 @@ function ProductListScreen({ history }) {
                                         <th>ID</th>
                                         <th>NAME</th>
                                         <th>PRICE</th>
-                                        <th>CATEGORY</th>
+                                        {/* <th>CATEGORY</th> */}
                                         <th>BRAND</th>
                                         <th></th>
                                     </tr>
@@ -98,7 +100,7 @@ function ProductListScreen({ history }) {
                                             <td>{product._id}</td>
                                             <td>{product.name}</td>
                                             <td>${product.price}</td>
-                                            <td>{product.category}</td>
+                                            {/* <td>{product.category}</td> */}
                                             <td>{product.brand}</td>
 
                                             <td>
@@ -109,7 +111,7 @@ function ProductListScreen({ history }) {
                                                 </LinkContainer>
 
                                                 <Button variant='danger' className='btn-sm' onClick={() => deleteHandler(product._id)}>
-                                                    <i className='fas fa-trash'></i>
+                                                    <i className='fas fa-trash' />
                                                 </Button>
                                             </td>
                                         </tr>
@@ -117,11 +119,15 @@ function ProductListScreen({ history }) {
                                 </tbody>
                             </Table>
                             <Paginate pages={pages} page={page} isAdmin={true} />
+
                         </div>
+
                     )}
+
 
         </div>
     );
+
 }
 
 export default ProductListScreen;

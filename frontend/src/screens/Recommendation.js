@@ -24,7 +24,7 @@ function Recommendation() {
 
     return (
         <div>
-            <h1>Recommendation for you</h1>
+            <h2>Recommendation for you</h2>
 
             {/* {!keyword
             } */}

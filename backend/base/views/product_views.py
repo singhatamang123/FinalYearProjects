@@ -14,22 +14,28 @@ import pandas as pd
 
 @api_view(['GET'])
 def getProducts(request):
-    query = request.query_params.get('keyword')
+
+    query = request.query_params.get('keyword') # to get the query from the frontend
     # print('query: ', query)
     if query == None:
-        query = ''
-    products = Product.objects.filter(name__icontains=query)
+        query = '' # to set the query to empty if it is not set
+    products = Product.objects.filter(name__icontains=query) # to get the products that match the query
 
-    page = request.query_params.get('page')
-    paginator = Paginator(products, 8)
+    category = request.query_params.get('category') # to get the category from the frontend
+
+    if category != None:
+        products = products.filter(category__name=category) # to get the products that match the category
+
+    page = request.query_params.get('page') # to get the page from the frontend
+    paginator = Paginator(products, 8) # to paginate the products
 
     try:
         products = paginator.page(page)
 
-    except PageNotAnInteger:
+    except PageNotAnInteger: # if the page is not an integer
         products = paginator.page(1)
 
-    except EmptyPage:
+    except EmptyPage: # if the page is out of range
         products = paginator.page(paginator.num_pages)
 
     if page == None:
@@ -37,7 +43,7 @@ def getProducts(request):
 
     page = int(page)
 
-    serializer = ProductSerializer(products, many=True)
+    serializer = ProductSerializer(products, many=True) # to serialize the products
     return Response({'products': serializer.data, 'page': page, 'pages': paginator.num_pages})
 
 
@@ -48,17 +54,26 @@ def getTopProducts(request):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
+# def vectorize(df_temp, description, titles):
+#     tfidf = TfidfVectorizer(min_df=3, max_features=None,
+#                             strip_accents='unicode', analyzer='word', token_pattern=r'\w{1,}',
+#                             ngram_range=(1, 3),
+#                             stop_words='english')
+
+#     tfid_matrix = tfidf.fit_transform(description)
+#     sig = sigmoid_kernel(tfid_matrix, tfid_matrix)
+#     indices = pd.Series(df_temp.index, index=titles).drop_duplicates()
+#     return tfidf, indices, sig
+
+
+@api_view(['GET']) # decorators to make the function accessible to the frontend (ovride the default behaviour)
 def getProduct(request, pk):
     product = Product.objects.get(_id=pk)
-    serializer = ProductSerializer(product, many=False)
-    return Response(serializer.data)
 
+    # products = Product.objects.all()
 
-@api_view(['GET'])
-def contentRecommendation(request):
     product_content = pd.DataFrame(list(Product.objects.all().values())).drop(
-        ["brand", "category", "_id", "rating", "numReviews", "price", "countInStock", "createdAt", "user_id", "image"], axis=1)
+        ["brand", "category_id", "_id", "rating", "numReviews", "price", "countInStock", "createdAt", "user_id", "image"], axis=1)
 
     # print(product_discription)
 
@@ -72,27 +87,97 @@ def contentRecommendation(request):
     tfidf_matrix = tfidf.fit_transform(product_content['description'])
 
     sig = sigmoid_kernel(tfidf_matrix, tfidf_matrix)
+    # print(sig[0])
 
     indices = pd.Series(product_content.index,
                         index=product_content['name']).drop_duplicates()
 
-    idx = indices['Red Led']
+    # print(indices)
 
+    # print(sig[0])
+    # print(indices['bag'])
+
+    idx = indices[product.name]
+    # print(idx)
+    # # print(idx)
     sig_scores = list(enumerate(sig[idx]))
+    # print(sig_scores)
 
     sig_scores = sorted(sig_scores, key=lambda x: x[1], reverse=True)[1:5]
+    # print(sig_scores)
 
-    # print(idx)
+    # # print(idx)
     product_indices = [i[0] for i in sig_scores]
+    # print(product_indices)
     posts = []
     for name in product_content['name'].iloc[product_indices]:
         posts.append(Product.objects.filter(name=name).first())
 
-    serializer = ProductSerializer(posts, many=True)
-    return Response({'products': serializer.data})
+    # print(posts)
+
+    serializers = ProductSerializer(posts, many=True)
+    serializer = ProductSerializer(product, many=False)
+    #  {'products': serializers.data}
+    return Response({'product': serializer.data, 'similar': serializers.data})
+    # return Response(serializer.data)
 
 
-@api_view(['Get'])
+# def get_recommendations(title, indices, sig):
+#     product_content = pd.DataFrame(list(Product.objects.all().values())).drop(
+#         ["brand", "category_id", "_id", "rating", "numReviews", "price", "countInStock", "createdAt", "user_id", "image"], axis=1)
+
+#     idx = indices[title]
+
+#     sig_scores = list(enumerate(sig[idx]))
+#     sig_scores = sorted(sig_scores, key=lambda x: x[1], reverse=True)[1:5]
+
+#     # print(idx)
+#     product_indices = [i[0] for i in sig_scores]
+#     posts = []
+#     for name in product_content['name'].iloc[product_indices]:
+#         posts.append(Product.objects.filter(name=name).first())
+
+#     return posts
+
+
+# @ api_view(['GET'])
+# def contentRecommendation(request):
+#     product_content = pd.DataFrame(list(Product.objects.all().values())).drop(
+#         ["brand", "category_id", "_id", "rating", "numReviews", "price", "countInStock", "createdAt", "user_id", "image"], axis=1)
+
+#     # print(product_discription)
+
+#     product_content["description"] = product_content["description"].fillna(
+#         '')
+
+#     tfidf = TfidfVectorizer(min_df=3, max_features=None,
+#                             strip_accents='unicode', analyzer='word', token_pattern=r'\w{1,}',
+#                             ngram_range=(1, 3),
+#                             stop_words='english')
+#     tfidf_matrix = tfidf.fit_transform(product_content['description'])
+
+#     sig = sigmoid_kernel(tfidf_matrix, tfidf_matrix)
+
+#     indices = pd.Series(product_content.index,
+#                         index=product_content['name']).drop_duplicates()
+
+#     idx = indices['Red Led Watch']
+
+#     sig_scores = list(enumerate(sig[idx]))
+
+#     sig_scores = sorted(sig_scores, key=lambda x: x[1], reverse=True)[1:5]
+
+#     # print(idx)
+#     product_indices = [i[0] for i in sig_scores]
+#     posts = []
+#     for name in product_content['name'].iloc[product_indices]:
+#         posts.append(Product.objects.filter(name=name).first())
+
+#     serializer = ProductSerializer(posts, many=True)
+#     return Response({'products': serializer.data})
+
+
+@ api_view(['Get'])
 def getCategory(request):
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
@@ -106,8 +191,8 @@ def getCategory(request):
 #     return Response(serializer.data)
 
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@ api_view(['POST'])
+@ permission_classes([IsAuthenticated])
 def createProductReview(request, pk):
     user = request.user
     product = Product.objects.get(_id=pk)
@@ -151,17 +236,18 @@ def createProductReview(request, pk):
         return Response({'Review Added'})
 
 
-@api_view(['POST'])
-@permission_classes([IsAdminUser])
+@ api_view(['POST'])
+@ permission_classes([IsAdminUser])
 def createProduct(request):
     user = request.user
+    category = request.POST.get('category')
     product = Product.objects.create(
         user=user,
         name='Sample Name',
         price=0,
         brand='Sample Brand',
         countInStock=0,
-        category='Sample Category',
+        category=request.POST.get('category'),
         description='',
     )
 
@@ -169,8 +255,8 @@ def createProduct(request):
     return Response(serializer.data)
 
 
-@api_view(['PUT'])
-@permission_classes([IsAdminUser])
+@ api_view(['PUT'])
+@ permission_classes([IsAdminUser])
 def updateProduct(request, pk):
     data = request.data
     product = Product.objects.get(_id=pk)
@@ -179,7 +265,7 @@ def updateProduct(request, pk):
     product.price = data['price']
     product.description = data['description']
     product.brand = data['brand']
-    product.category = data['category']
+    product.category_id = data['category_id']
     product.countInStock = data['countinstock']
     product.save()
 
@@ -187,15 +273,15 @@ def updateProduct(request, pk):
     return Response(serializer.data)
 
 
-@api_view(['DELETE'])
-@permission_classes([IsAdminUser])
+@ api_view(['DELETE'])
+@ permission_classes([IsAdminUser])
 def deleteProduct(request, pk):
     product = Product.objects.get(_id=pk)
     product.delete()
     return Response('Producted Deleted')
 
 
-@api_view(['POST'])
+@ api_view(['POST'])
 def uploadImage(request):
     data = request.data
     product_id = data['product_id']
@@ -222,8 +308,8 @@ def get_similar(product_name, rating, corrMatrix):
     return similar_ratings
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@ api_view(['GET'])
+@ permission_classes([IsAuthenticated])
 def getRecommendations(request):
     user = request.user.id
     # print(user)

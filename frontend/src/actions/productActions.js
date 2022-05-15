@@ -8,10 +8,6 @@ import {
   PRODUCT_RECOMMEND_LIST_SUCCESS,
   PRODUCT_RECOMMEND_LIST_FAIL,
 
-  PRODUCT_RECOMMEND_CONTENT_LIST_REQUEST,
-  PRODUCT_RECOMMEND_CONTENT_LIST_SUCCESS,
-  PRODUCT_RECOMMEND_CONTENT_LIST_FAIL,
-
 
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
@@ -99,46 +95,6 @@ export const recommendProduct = (_id) => async (dispatch, getState) => {
   catch (error) {
     dispatch({
       type: PRODUCT_RECOMMEND_LIST_FAIL,
-      payload:
-        error.response && error.response.data.detail
-          ? error.response.data.detail
-          : error.message,
-    });
-    //  return response to user if statement if error message error message.data and used tenary method and none generic message
-  }
-};
-
-
-export const recommendContentProduct = (_id) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: PRODUCT_RECOMMEND_CONTENT_LIST_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-
-      headers: {
-        "Content-type": "application/json",
-        authorization: `Bearer ${userInfo.token}`,
-      }
-
-    }
-
-    const { data } = await axios.get(
-      '/api/products/content/', config
-    );
-
-    dispatch({
-      type: PRODUCT_RECOMMEND_CONTENT_LIST_SUCCESS,
-      payload: data
-
-    })
-  }
-  catch (error) {
-    dispatch({
-      type: PRODUCT_RECOMMEND_CONTENT_LIST_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail

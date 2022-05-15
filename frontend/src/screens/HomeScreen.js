@@ -6,10 +6,9 @@ import Directory from '../components/directory/directory.js';
 function HomeScreen() {
   return (
     <div>
-
       <ProductCarousel />
-      <h1>Collections store</h1>
-      <div className='homepage'>
+      <h2>Collections store</h2>
+      <div className='homepage' >
         <Directory />
       </div>
     </div>
